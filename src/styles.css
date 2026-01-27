@@ -1,0 +1,81 @@
+*{
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+:root {
+  
+}
+.inherit {
+  color: inherit;
+  background-color: inherit;
+  font: inherit;
+}
+input, textarea {
+  border: none;
+  min-height: 3rem;
+  outline: none;
+  padding: 0.4rem 0.8rem;
+  border-radius: 0.5rem;
+}
+input:focus-within, textarea:focus-within {
+  box-shadow: 0px 3px 8px rgba(128, 128, 128, 0.3);
+}
+.section {
+  padding: 0.5rem;
+}
+.section:focus-visible, .section:focus-within {
+  border-radius: 0.5rem;
+  outline: 2px solid rgba(128, 128, 128, 0.3);
+}
+.profile-pic {
+  width: 70px;
+  height: 70px;
+  object-fit: cover;
+  border-radius: 50%;
+  cursor: pointer;
+}
+#profile-pic-div{
+  margin: 10px;
+  width: 70px;
+  height: 70px;
+  border-radius: 50%;
+}
+.flex-row {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
+.flex-column {
+  display: flex;
+  flex-direction: column;
+}
+.space-btw {
+  justify-content: space-between;
+}
+.space-arnd {
+  justify-content: space-around;
+}
+.xl {
+  font-size: calc(1rem + 1vw);
+}
+.large {
+  font-size: calc(0.8rem + 0.3vw);
+}
+.bold {
+  font-weight: 600;
+}
+.ft-heading {
+  font-family: 'Montserrat';
+}
+.uppercase {
+  text-transform: uppercase;
+}
+.line {
+  flex: 1;
+  height: 3px;
+  background-color: rgb(128, 128, 128);
+}
+.gap05 {
+  gap: 0.5rem;
+}
