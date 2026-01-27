@@ -31,7 +31,6 @@ const Textarea = ({id, unlocked, initialValue, placeholder}) => {
       onChange={unlocked && ((e) => setValue(e.target.value))}
       style={{
         resize: 'none',
-        fieldSizing: 'content',
         cursor: unlocked ? 'text' : 'default',
         caretColor: unlocked ? 'initial' : 'transparent'
       }}
@@ -76,32 +75,10 @@ const Dropdown = ({id, unlocked, options}) => {
     </div>
   )
 }
-
-const Slider = ({id, label, unlocked, initialValue }) => {
-  const [value, setValue] = useState(initialValue);
-  return (
-    <div id={id} className='slider-div flex-column'>
-      <label htmlFor={`${id}-input`} className='block inherit'>
-        {label}
-      </label>
-      <input
-        type='range'
-        name={`${id}-input`}
-        id={id}
-        className='slider-input block'
-        max={100}
-        min={10}
-        value={value}
-        onChange={unlocked && ((e) => setValue(e.target.value))}
-      ></input>
-    </div>
-  )
-}
-
 const Heading = ({id, value}) => {
   return (
-    <div id={id} className='flex-row gap02'>
-      <h2 className='bold large'>{value}</h2>
+    <div id={id} className='flex-row gap05'>
+      <h2 className='bold large uppercase'>{value}</h2>
       <div className='line inherit'></div>
     </div>
   )
@@ -113,19 +90,47 @@ const DelButton = ({id, unlocked, handleClick}) =>{
       type='button'
       className={`${unlocked ? 'reveal-btn' : '' } inherit del-btn`}
       onClick={unlocked && handleClick}
+      style={{display: unlocked ? 'block' : 'none'}}
     >
-      <i className='fa-regular fa-trash'/>
+      <i className='fa-solid fa-trash'/>
     </button>
   )
 }
+const Slider = ({id, label, unlocked, initialValue, handleDel }) => {
+  const [value, setValue] = useState(initialValue);
+  const [progress, setProgress] = useState(initialValue);
+  const handleChange = (e) => {
+    setValue(e.target.value);
+    setProgress(e.target.value);
+  }
+  return (
+    <div id={id} className='slider-div flex-column'>
+      <TextInput id={`${id}-input`} className='block inherit uppercase' unlocked={unlocked} initialValue={label} placeholder={'JS'}>
+      </TextInput>
+      <input
+        type='range'
+        name={`${id}-input`}
+        id={id}
+        className={`${!unlocked && 'locked-slider'} slider-input block`}
+        max={100}
+        min={10}
+        value={value}
+        onChange={unlocked && ((e) => handleChange(e))}
+        style={{backgroundSize: `${progress -5}% 100%`}}
+      ></input>
+      <DelButton id={`${id}-del`} unlocked={unlocked} handleClick={handleDel}></DelButton> 
+    </div>
+  )
+}
 
-const AddButton = ({id, unlocked, handleClick, expandable}) => {
+const AddButton = ({id, unlocked, handleClick, expandable, style}) => {
   return (
     <button
       id={id}
       type='button'
       className={`${unlocked ? 'reveal-btn' : '' } inherit del-btn`}
       onClick={unlocked && expandable && handleClick}
+      style={style}
     >
       <i className='fa-regular fa-plus'/>
     </button>
@@ -163,9 +168,11 @@ const ProfilePic = ({unlocked}) => {
         type='file'
         id='profile-pic-input'
         accept='image/*'
-        style={{opacity: 0}}
+        style={{display: 'none'}}
         onChange={handleImageChange}
       ></input>
     </div>
   )
 }
+
+export {TextInput, Textarea, Slider, ProfilePic, Heading, AddButton}
