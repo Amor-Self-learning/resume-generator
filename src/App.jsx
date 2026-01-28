@@ -57,8 +57,8 @@ const Skills = ({unlocked}) => {
 
 const Education = ({unlocked}) => {
   const edu = [
-    {id: 'inter', title: 'Intermediate', date: {start: {month: 'March', year: '2020'}, end: {month: 'Feb', year: '2022'}}, value: "I've completed my Intermediate education from Govt Millat Graduage College Mumtazabaad Multan with 89% of Marks. I got 2nd Position in the Class"},
-    {id: 'bs-cs', title: 'BS CS', date: {start: {month: 'Sep' , year: 2025}, end: {month: 'June', year: 2029}}, value: "I've started to pursue my my BS CS from NUML Multan in Fall 2025 which will be completed in 2029. I'm very interested in this field and making efforts to understand and use it."}
+    {id: 'inter', title: 'Intermediate', date: {start: 2020, end: 2022}, value: "I've completed my Intermediate education from Govt Millat Graduage College Mumtazabaad Multan with 89% of Marks. I got 2nd Position in the Class"},
+    {id: 'bs-cs', title: 'BS CS', date: {start: 2025, end: 2029}, value: "I've started to pursue my my BS CS from NUML Multan in Fall 2025 which will be completed in 2029. I'm very interested in this field and making efforts to understand and use it."}
   ]
 
   const newEdu = {id: crypto.randomUUID(), title: 'New Study', date: {start: {month: 'Jan', year: 2026}, end: {month: 'Jan', year:  2027}, value: "I've Pursued this new degree..."}}
@@ -79,8 +79,8 @@ const Education = ({unlocked}) => {
 
 const Experience = ({unlocked}) => {
   const exp = [
-    {id: 'top', title: 'TOP', date: {start: {month: 'August', year: 2025}, end: {month: 'April', year: '2026'}}, value: "I re started The Odin Project ins August and hope to finish it in April 2026, I've no prior working experience"},
-    {id: 'cs50', title: 'CS50', date: {start: {month: 'Jan', year: 2025}, end: {month: 'Dec', year: 2025}}, value: "I started cs50x in jan 2025 and finished it in Dec 2025."}
+    {id: 'top', title: 'TOP', date: {start:  2025, end:2026}, value: "I re started The Odin Project ins August and hope to finish it in April 2026, I've no prior working experience"},
+    {id: 'cs50', title: 'CS50', date: {start: 2025, end: 2025}, value: "I started cs50x in jan 2025 and finished it in Dec 2025."}
   ]
   const newExp = {id: crypto.randomUUID(), title: 'New Experience', date: {start: {month: 'Jan', year: 2026}, end: {month: 'Jan', year:  2027}, value: "I've gained this expereince..."}}
 
@@ -153,6 +153,14 @@ const App = () => {
      <Achievements unlocked={unlocked}></Achievements>
      <Hobbies unlocked={unlocked}></Hobbies>
      <div className='seperator'></div>
+     <button
+       id='edit-btn'
+       className='btn inherit'
+       onClick={() => setUnlocked(!unlocked)}
+       style={{backgroundColor: 'whitesmoke'}}
+      >
+        {unlocked ? "SUBMIT NOW" : "EDIT NOW"}
+      </button>
     </>
   )
 }
