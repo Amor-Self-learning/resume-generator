@@ -3,30 +3,64 @@
   padding: 0;
   box-sizing: border-box;
 }
+#root {
+  margin-top: 4pt;
+  box-shadow: 0 5pt 10pt rgba(0,0,0,0.05);
+  background: #fefcf4;
+  opacity: 0.9;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+  background-blend-mode: overlay;
+}
 .inherit {
   color: inherit;
   background-color: inherit;
   font: inherit;
 }
-input[type="text"], textarea {
+input[type="text"], input[type="number"], textarea {
   border: none;
-  min-height: 2rem;
   outline: none;
-  padding: 0.4rem 0.8rem;
-  border-radius: 0.5rem;
+  padding: 4pt 8pt;
+  border-radius: 4pt;
 }
 textarea {
-  padding: 1rem;
+  width: 100%;
+  padding: 4pt;
+  scrollbar-width: none;
+  overflow: hidden;
+}
+.slider-div .del-btn {
+  width: 15%;
+}
+input[id$="-input"] {
+  width: 85%;
+}
+.reveal-btn {
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.3s ease-in-out;
+  padding: 2pt 4pt;
+  border: none;
+  box-shadow: 0px 2pt 8pt rgba(128, 128, 128, 0.3);
+  color: rgb(128, 128, 128);
+  border-radius: 2pt;
+}
+.slider-div:hover .reveal-btn,
+.slider-div:focus-within .reveal-btn,
+.section:hover  .reveal-btn,
+.section:focus-within  .reveal-btn {
+  opacity: 1;
+  pointer-events: visible;
+  cursor: pointer;
 }
 input:focus-within, textarea:focus-within {
-  box-shadow: 0px 3px 8px rgba(128, 128, 128, 0.3);
+  box-shadow: 1pt 2pt 8pt rgba(128, 128, 128, 0.4);
 }
 .section {
-  padding: 0.5rem;
-  margin: 0.5rem;
+  padding: 4pt;
+  margin: 4pt;
 }
 .section:focus-visible, .section:focus-within {
-  border-radius: 0.5rem;
+  border-radius: 4pt;
   outline: 2px solid rgba(128, 128, 128, 0.3);
 }
 .profile-pic {
@@ -50,6 +84,7 @@ input:focus-within, textarea:focus-within {
 .flex-column {
   display: flex;
   flex-direction: column;
+  gap: 3pt;
 }
 .space-btw {
   justify-content: space-between;
@@ -58,13 +93,13 @@ input:focus-within, textarea:focus-within {
   justify-content: space-around;
 }
 .xl {
-  font-size: calc(1rem + 1vw);
+  font-size: 24pt;
 }
 .large {
-  font-size: calc(0.8rem + 0.3vw);
+  font-size: 16pt;
 }
 .bold {
-  font-weight: 600;
+  font-weight: 700;
 }
 .ft-heading {
   font-family: 'Montserrat';
@@ -74,13 +109,9 @@ input:focus-within, textarea:focus-within {
 }
 .line {
   flex: 1;
-  height: 3px;
-  background-color: rgb(128, 128, 128);
+  height: 2pt;
+  background-color: rgb(128, 128, 128, 0.3);
 }
-.gap05 {
-  gap: 0.5rem;
-}
-
 .slider-input {
   -webkit-appearance: none;
   appearance: none;
@@ -88,7 +119,7 @@ input:focus-within, textarea:focus-within {
   height: 6px;
   background: transparent;
   cursor: pointer;
-  background-image: linear-gradient(to right, darkcyan, darkcyan);
+  background-image: linear-gradient(to right, rgb(212, 255, 0), rgb(212, 255, 0));
   background-repeat: no-repeat;
 }
 .slider-input::-webkit-slider-thumb {
@@ -136,11 +167,41 @@ input:focus-within, textarea:focus-within {
   height: 300px;
 }
 .fit-content {
-  width: fit-content;
-  min-width: 1rem;
+  width: 100pt;
 }
 .seperator {
-  width: 4px;
+  width: 2pt;
   margin: 0 auto;
   background-color: rgba(128, 128, 128, 0.3);
+}
+.flex-wrap {
+  flex-wrap: wrap;
+}
+.gap5 {
+  gap: 5pt;
+}
+.all-edu-exp textarea{
+  height: 53pt;
+}
+@media print {
+  @page {
+    margin: 0;
+  }
+}
+.btn {
+  color: rgb(128, 128, 128);
+  padding: 6pt 12pt;
+  border: none;
+  border-radius: 4pt;
+  cursor: pointer;
+}
+#edit-btn {
+  color: rgb(128, 128, 128);
+  position: absolute;
+  bottom: 10pt;
+  right: 20pt;
+}
+button[id$="-add-btn"] {
+  color: whitesmoke;
+  background-color: rgb(128, 128, 128);
 }
