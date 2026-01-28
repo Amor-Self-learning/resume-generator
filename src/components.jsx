@@ -208,6 +208,25 @@ const [values, setValues] = useState(initialValue);
           ))}
         </div>
       }
+      {type === 'achievements' &&
+        <section className='felx-column all-achivements'>
+          <Heading id='achieve-heading' value= "Achievements"></Heading>
+          {values.map(val => (
+            <div id={id}>
+              <TextInput id={`${val.id}-title`} initialValue={val.title} unlocked={unlocked} placeholder='Title' ></TextInput>
+              <TextInput id={`${val.id}-val`} initialValue={val.value} unlocked={unlocked} placeholder='Description'></TextInput>
+            </div>
+          ))}
+        </section>
+      }
+      {type === 'hobbies' && 
+        <Heading id='hobbies-heading' value='Hobbies'></Heading>
+      }
+      {type === 'hobbies' &&
+        values.map(hobb => (
+        <TextInput id={hobb.id} unlocked={unlocked} className={'hobby tag'} initialValue={hobb.value}  placeholder={'Hobby'}></TextInput>
+        ))
+      }
       <AddButton id={`${id}-add-btn`} unlocked={unlocked} expandable={expandable} handleClick={handleAdd} style={{display: unlocked && expandable ? 'block' : 'none'}}></AddButton>
     </section>
   )
