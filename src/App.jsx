@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { TextInput, Textarea, Slider, ProfilePic,AddButton,  Heading } from './components'
+import { TextInput, Textarea, Slider, ProfilePic,AddButton,  Heading, ExpandableSection } from './components'
 import './layout.css'
 import './styles.css'
 const Title = ({unlocked}) => {
@@ -31,43 +31,55 @@ const Profile = ({unlocked}) => {
 }
 
 const Skills = ({unlocked}) => {
-  const [skills, setSkills] = useState([
+  const skills = [
     {id: 'html', label: 'HTML', unlocked: unlocked, initialValue: 80},
     {id: 'css', label: 'CSS', unlocked: unlocked, initialValue: 85},
     {id: 'js', label: 'JS', unlocked: unlocked, initialValue: 85},
     {id: 'react', label: 'React', unlocked: unlocked, initialValue: 50},
     {id: 'nodejs', label: 'NodeJS', unlocked: unlocked, initialValue: 40},
     {id: 'restapi', label: 'RestAPI', unlocked: unlocked, initialValue: 60}
-  ]);
+  ];
   const newSkill = {id: crypto.randomUUID(), label: 'New Skill', unlocked: unlocked, initialValue: 50 };
   const isExpandable = () => {
     return skills.length < 7 ? true: false;
   }
-  const handleAddBtn = () => {
-    if(unlocked && isExpandable()) {
-      setSkills([...skills, newSkill])
-    }
-  }
-  const handleDel = (e) => {
-    const newSkills = skills.filter(skill => `${skill.id}-del` !== e.target.id);
-    setSkills([...newSkills])
-  }
   return (
-    <section 
+    <ExpandableSection 
+      id={'skills'} 
+      className='section flex-column'
       tabIndex={2}
-      id='skills'
-      className='flex-column'
-    >
-      <Heading id='skill-heading' value='SKILLS'></Heading>
-      <div className="flex-column all-sliders">
-      {skills.map(skil => (
-        <Slider id={skil.id} key={skil.id} label={skil.label} unlocked={unlocked} initialValue={skil.initialValue} handleDel={handleDel}></Slider>
-      ))}
-      </div>
-      <AddButton id='skill-add-btn' unlocked={unlocked} expandable={isExpandable()} handleClick={handleAddBtn} style={{display: unlocked && isExpandable() ? 'block' : 'none'}}></AddButton>
-    </section>
+      unlocked={unlocked}
+      newValue={newSkill}
+      initialValue={skills}
+      expandable={isExpandable()}
+      type='skills'
+    ></ExpandableSection> 
   )
 
+}
+
+const Education = ({unlocked}) => {
+  const edu = [
+    {id: 'inter', title: 'Intermediate', date: {start: {month: 'March', year: '2020'}, end: {month: 'Feb', year: '2022'}}, value: "I've completed my Intermediate education from Govt Millat Graduage College Mumtazabaad Multan with 89% of Marks. I got 2nd Position in the Class"},
+    {id: 'bs', title: 'BS CS', date: {start: {month: 'Sep' , year: 2025}, end: {month: 'June', year: 2029}}, value: "I've started to pursue my my BS CS from NUML Multan in Fall 2025 which will be completed in 2029. I'm very interested in this field and making efforts to understand and use it."}
+  ]
+
+  const newEdu = {id: crypto.randomUUID(), title: 'New Study', date: {start: {month: 'Jan', year: 2026}, end: {month: 'Jan', year:  2027}, value: "I've Pursued this new degree..."}}
+  const isExpandable = () =>{
+    return edu.length < 4 ? true: false;
+  }
+  return (
+    <ExpandableSection 
+      tabIndex={3} 
+      id='education' 
+      unlocked={unlocked} 
+      className={'flex-column education'} 
+      newValue={newEdu} 
+      initialValue={edu} 
+      expandable={isExpandable()}
+      type='edu-exp'
+    ></ExpandableSection>
+  )
 }
 const App = () => {
   const [unlocked, setUnlocked] = useState(true);
@@ -76,6 +88,7 @@ const App = () => {
      <Header unlocked={unlocked}></Header>
      <Profile unlocked={unlocked}></Profile>
      <Skills unlocked={unlocked}></Skills>
+     <Education unlocked={unlocked}></Education>
     </>
   )
 }
