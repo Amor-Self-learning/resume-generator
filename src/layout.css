@@ -1,0 +1,39 @@
+#root {
+  font-size: 14px;
+  display: grid;
+  width: 90ch;
+  margin: 0 auto;
+  grid-template: repeat(10, 120px) / 32ch 2ch 58ch;
+}
+.seperator {
+  grid-column: 2/3;
+  grid-row: 2/-1;
+}
+#header {
+  grid-column: 1/-1;
+  grid-row: 1/2;
+}
+#profile {
+  grid-column: 1/2;
+  grid-row: 2/4;
+}
+#skills {
+  grid-column: 1/2;
+  grid-row: 4/9;
+}
+#achievements {
+  grid-column: 1/2;
+  grid-row: 9/11;
+}
+#education {
+  grid-column: 3/-1;
+  grid-row: 2/5;
+}
+#experience {
+  grid-column: 3/-1;
+  grid-row: 5/8;
+}
+#hobbies {
+  grid-column: 3/-1;
+  grid-row: 9/11;
+}
