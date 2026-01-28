@@ -34,7 +34,7 @@ const Textarea = ({id, unlocked, initialValue, placeholder}) => {
         cursor: unlocked ? 'text' : 'default',
         caretColor: unlocked ? 'initial' : 'transparent'
       }}
-      className='textarea inherit'
+      className='inherit'
     ></textarea>
   )
 }
@@ -50,7 +50,7 @@ const DelButton = ({idToDel, unlocked, handleClick}) =>{
   return (
     <button
       type='button'
-      className={`${unlocked ? 'reveal-btn' : '' } inherit del-btn`}
+      className={`${unlocked ? 'reveal-btn' : '' } inherit`}
       onClick={unlocked && (() => handleClick(idToDel))}
       style={{display: unlocked ? 'block' : 'none'}}
     >
@@ -92,7 +92,7 @@ const AddButton = ({id, unlocked, handleClick, isExpandable}) => {
     <button
       id={id}
       type='button'
-      className={`${unlocked ? 'reveal-btn' : '' } inherit del-btn`}
+      className={`${unlocked ? 'reveal-btn' : '' } inherit`}
       onClick={unlocked && isExpandable() ? handleClick : undefined}
       style={{
         display: unlocked && isExpandable() ? 'block' : 'none'
@@ -142,24 +142,17 @@ const ProfilePic = ({unlocked}) => {
 }
 
 const DateInput = ({id, unlocked, initialValue}) =>{
-  const [year, setYear] = useState(initialValue.year)
+  const [year, setYear] = useState(initialValue)
 
   return (
     <div id={id} className='flex-row'>
-      <TextInput 
-        id={`${id}-month`} 
-        unlocked={unlocked} 
-        initialValue={initialValue.month} 
-        className={'uppercase bold fit-content'}
-        placeholder={'Month'}
-      ></TextInput>
       <input
         type='number'
         min='1950'
         max='2050'
         value={year}
         onChange={unlocked && ((e) => setYear(e.target.value))}
-        className='inherit'
+        className='inherit borderless'
       ></input>
     </div>
   )
@@ -168,10 +161,10 @@ const DateInput = ({id, unlocked, initialValue}) =>{
 const EduExp = ({id, value,unlocked, handleClick, title, date}) => {
   return (
     <section id={id}>
-      <div className='flex-row'>
+      <div className='flex-row bold'>
         <DateInput id={`${id}-start-date`} unlocked={unlocked} initialValue={date.start}></DateInput>
         <DateInput id={`${id}-end-date`} unlocked={unlocked} initialValue={date.end}></DateInput>
-        <TextInput id={`${id}-title`} unlocked={unlocked} initialValue={title} className='uppercase' placeholder='Institute Name'></TextInput>
+        <TextInput id={`${id}-title`} unlocked={unlocked} initialValue={title} className='uppercase'></TextInput>
       </div>
       <Textarea id={`${id}-text`} unlocked={unlocked} initialValue={value} placeholder='Description'></Textarea>
       <DelButton idToDel={id} unlocked={unlocked} handleClick={handleClick}></DelButton>
