@@ -106,6 +106,45 @@ const Experience = ({unlocked}) => {
   )
 }
 
+const Achievements = ({unlocked}) => {
+  const achievements = [
+    {id: 'cs50', title: 'CS50x', value: 'Completed cs50x in 2025'},
+    {id: 'cs50', title: 'Rainify', value: 'Created weather app in vanilla JS'}
+  ]
+
+  const newAchieve = {id: crypto.randomUUID(), title: 'New Achievement', value: "I achived ..."}
+  const isExpandable = () => {
+    return achievements.length < 4 ? true : false;
+  }
+
+  return (
+    <ExpandableSection 
+      tabIndex={5} id='achievements' 
+      unlocked={unlocked} 
+      className='flex-column achievements' 
+      newValue={newAchieve} 
+      initialValue={achievements} 
+      expandable={isExpandable()} 
+      type='achievements'
+    ></ExpandableSection>
+  )
+}
+
+const Hobbies = ({unlocked}) => {
+  const hobbies = [
+    {id: 'cricket', value: 'Watching Cricket'},
+    {id: 'browsing', value: 'Browsing'},
+    {id: 'ui', value: 'creatingUI'}
+  ]
+
+  const newHobby = {id: crypto.randomUUID(), value: 'newHobby'};
+  const isExpandable = () =>{
+    return hobbies.length < 10 ? true : false;
+  }
+  return (
+    <ExpandableSection id={'hobbies'} tabIndex={6} initialValue={hobbies} newValue={newHobby} unlocked={unlocked} expandable={isExpandable()} type='hobbies'></ExpandableSection>
+  )
+}
 const App = () => {
   const [unlocked, setUnlocked] = useState(true);
   return (
@@ -115,6 +154,9 @@ const App = () => {
      <Skills unlocked={unlocked}></Skills>
      <Education unlocked={unlocked}></Education>
      <Experience unlocked={unlocked}></Experience>
+     <Achievements unlocked={unlocked}></Achievements>
+     <Hobbies unlocked={unlocked}></Hobbies>
+     <div className='seperator'></div>
     </>
   )
 }
