@@ -2,10 +2,10 @@
   font-size: 11pt;
   display: grid;
   width: 595pt;
-  height: 842pt;
+  height: 820pt;
   padding: 25pt;
   margin: 0 auto;
-  grid-template: repeat(12, 65.8pt) / 200pt 8pt 338pt;
+  grid-template: repeat(12, 63pt) / 200pt 8pt 338pt;
 }
 .seperator {
   grid-column: 2/3;
