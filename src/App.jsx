@@ -81,6 +81,31 @@ const Education = ({unlocked}) => {
     ></ExpandableSection>
   )
 }
+
+const Experience = ({unlocked}) => {
+  const exp = [
+    {id: 'top', title: 'TOP', date: {start: {month: 'August', year: 2025}, end: {month: 'April', year: '2026'}, value: "I re started The Odin Project ins August and hope to finish it in April 2026, I've now prior working experience"}},
+    {id: 'cs50', title: 'CS50', date: {start: {month: 'Jan', year: 2025}, end: {month: 'Dec', year: 2025}}, value: "I started cs50x in jan 2025 and finished it in Dec 2025."}
+  ]
+  const isExpandable = () => {
+    return exp.length < 4 ? true : false;
+  }
+  const newExp = {id: crypto.randomUUID(), title: 'New Experience', date: {start: {month: 'Jan', year: 2026}, end: {month: 'Jan', year:  2027}, value: "I've gained this expereince..."}}
+
+  return (
+    <ExpandableSection
+      tabIndex={4}
+      id='experience'
+      unlocked={unlocked}
+      className={'flex-column experience'}
+      newValue={newExp}
+      initialValue={exp}
+      expandable={isExpandable()}
+      type='edu-exp'
+    ></ExpandableSection>
+  )
+}
+
 const App = () => {
   const [unlocked, setUnlocked] = useState(true);
   return (
@@ -89,6 +114,7 @@ const App = () => {
      <Profile unlocked={unlocked}></Profile>
      <Skills unlocked={unlocked}></Skills>
      <Education unlocked={unlocked}></Education>
+     <Experience unlocked={unlocked}></Experience>
     </>
   )
 }
