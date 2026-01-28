@@ -40,26 +40,25 @@ const Textarea = ({id, unlocked, initialValue, placeholder}) => {
 }
 const Heading = ({id, value}) => {
   return (
-    <div id={id} className='flex-row gap05'>
+    <div id={id} className='flex-row gap5'>
       <h2 className='bold large uppercase'>{value}</h2>
       <div className='line inherit'></div>
     </div>
   )
 }
-const DelButton = ({id, unlocked, handleClick}) =>{
+const DelButton = ({idToDel, unlocked, handleClick}) =>{
   return (
     <button
-      id={id}
       type='button'
       className={`${unlocked ? 'reveal-btn' : '' } inherit del-btn`}
-      onClick={unlocked && handleClick}
+      onClick={unlocked && (() => handleClick(idToDel))}
       style={{display: unlocked ? 'block' : 'none'}}
     >
       <i className='fa-solid fa-trash'/>
     </button>
   )
 }
-const Slider = ({id, label, unlocked, initialValue, handleDel }) => {
+const Slider = ({id, label, unlocked, initialValue, handleClick }) => {
   const [value, setValue] = useState(initialValue);
   const [progress, setProgress] = useState(initialValue);
   const handleChange = (e) => {
@@ -68,8 +67,11 @@ const Slider = ({id, label, unlocked, initialValue, handleDel }) => {
   }
   return (
     <div id={id} className='slider-div flex-column gap05'>
+      <div className='flex-row'>
       <TextInput id={`${id}-input`} className='block inherit uppercase' unlocked={unlocked} initialValue={label} placeholder={'JS'}>
       </TextInput>
+      <DelButton idToDel={id} unlocked={unlocked} handleClick={handleClick}></DelButton> 
+      </div>
       <input
         type='range'
         name={`${id}-input`}
@@ -81,19 +83,20 @@ const Slider = ({id, label, unlocked, initialValue, handleDel }) => {
         onChange={unlocked && ((e) => handleChange(e))}
         style={{backgroundSize: `${progress -5}% 100%`}}
       ></input>
-      <DelButton id={`${id}-del`} unlocked={unlocked} handleClick={handleDel}></DelButton> 
     </div>
   )
 }
 
-const AddButton = ({id, unlocked, handleClick, expandable, style}) => {
+const AddButton = ({id, unlocked, handleClick, isExpandable}) => {
   return (
     <button
       id={id}
       type='button'
       className={`${unlocked ? 'reveal-btn' : '' } inherit del-btn`}
-      onClick={unlocked && expandable && handleClick}
-      style={style}
+      onClick={unlocked && isExpandable() ? handleClick : undefined}
+      style={{
+        display: unlocked && isExpandable() ? 'block' : 'none'
+      }}
     >
       <i className='fa-regular fa-plus'/>
     </button>
@@ -162,7 +165,7 @@ const DateInput = ({id, unlocked, initialValue}) =>{
   )
 
 }
-const EduExp = ({id, value, unlocked, handleDel, title, date}) => {
+const EduExp = ({id, value,unlocked, handleClick, title, date}) => {
   return (
     <section id={id}>
       <div className='flex-row'>
@@ -171,63 +174,64 @@ const EduExp = ({id, value, unlocked, handleDel, title, date}) => {
         <TextInput id={`${id}-title`} unlocked={unlocked} initialValue={title} className='uppercase' placeholder='Institute Name'></TextInput>
       </div>
       <Textarea id={`${id}-text`} unlocked={unlocked} initialValue={value} placeholder='Description'></Textarea>
-      <DelButton id={`${id}-del`} unlocked={unlocked} handleClick={handleDel}></DelButton>
+      <DelButton idToDel={id} unlocked={unlocked} handleClick={handleClick}></DelButton>
     </section>
   )
 }
-const ExpandableSection = ({ tabIndex, id, unlocked, className, newValue, initialValue, expandable, type}) => {
+const ExpandableSection = ({ tabIndex, id, unlocked, className, newValue, maxLength, initialValue, heading, type}) => {
 const [values, setValues] = useState(initialValue);
+const isExpandable = () => {
+  return values.length < maxLength ? true : false;
+}
   const handleAdd = () => {
-    if(unlocked && expandable) {
+    if(unlocked && isExpandable()) {
       setValues([...values, newValue])
     }
   }
-  const handleDel = (e) => {
-    const newValues = values.filter(val => `${val.id}-del` !== e.target.id);
+  const handleDel = (idToDel) => {
+    const newValues = values.filter(val => val.id !== idToDel);
     setValues([...newValues])
   }
   return (
     <section 
       tabIndex={tabIndex}
       id={id}
-      className={className}
+      className={`${className} section`}
     >      
-      {type === 'skills' 
-        && <Heading id='skill-heading' value='SKILLS'></Heading>}
+      <Heading id={`${id}-heading`} value={heading}></Heading>
       {type === 'skills' 
         && <div className="flex-column all-sliders">
         {values.map(val => (
-          <Slider id={val.id} key={val.id} label={val.label} unlocked={unlocked} initialValue={val.initialValue} handleDel={handleDel}></Slider>
+          <Slider id={val.id} key={val.id} label={val.label} unlocked={unlocked} initialValue={val.initialValue} handleClick={handleDel}></Slider>
         ))}
         </div>
       }
       {type === 'edu-exp' &&
         <div className='flex-column all-edu-exp'>
           {values.map(val => (
-            <EduExp id={val.id} key={val.id} value={val.value} unlocked={unlocked} handleDel={handleDel} date={val.date} title={val.title}></EduExp>
+            <EduExp id={val.id} key={val.id} value={val.value} unlocked={unlocked} handleClick={handleDel} date={val.date} title={val.title}></EduExp>
           ))}
         </div>
       }
       {type === 'achievements' &&
         <section className='felx-column all-achivements'>
-          <Heading id='achieve-heading' value= "Achievements"></Heading>
           {values.map(val => (
-            <div id={id}>
+            <div id={id} key={val.id}>
               <TextInput id={`${val.id}-title`} initialValue={val.title} unlocked={unlocked} placeholder='Title' ></TextInput>
               <TextInput id={`${val.id}-val`} initialValue={val.value} unlocked={unlocked} placeholder='Description'></TextInput>
+              <DelButton idToDel={val.id} unlocked={unlocked} handleClick={handleDel}></DelButton>
             </div>
           ))}
         </section>
       }
-      {type === 'hobbies' && 
-        <Heading id='hobbies-heading' value='Hobbies'></Heading>
-      }
       {type === 'hobbies' &&
-        values.map(hobb => (
-        <TextInput id={hobb.id} unlocked={unlocked} className={'hobby tag'} initialValue={hobb.value}  placeholder={'Hobby'}></TextInput>
-        ))
+      <div className="flex-row flex-wrap">
+        {values.map(hobb => (
+        <TextInput id={hobb.id} key={hobb.id}unlocked={unlocked} className={'hobby tag'} initialValue={hobb.value}  placeholder={'Hobby'}></TextInput>
+        ))}
+      </div>
       }
-      <AddButton id={`${id}-add-btn`} unlocked={unlocked} expandable={expandable} handleClick={handleAdd} style={{display: unlocked && expandable ? 'block' : 'none'}}></AddButton>
+      <AddButton id={`${id}-add-btn`} unlocked={unlocked} isExpandable={isExpandable} handleClick={handleAdd} ></AddButton>
     </section>
   )
 }
