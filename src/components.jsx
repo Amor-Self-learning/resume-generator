@@ -38,43 +38,6 @@ const Textarea = ({id, unlocked, initialValue, placeholder}) => {
     ></textarea>
   )
 }
-const Dropdown = ({id, unlocked, options}) => {
-  const [isOpen, setIsOpen] = useState(false)
-  const [selected, setSelected] = useState(options[0])
-
-  const handleChange = (opt) => {
-    unlocked && setSelected(opt);
-    setIsOpen(false);
-  }
-  const handleToggle = () => {
-    setIsOpen(!isOpen);
-  }
-  return (
-    <div
-      id={id}
-      className={`${unlocked && isOpen && 'isOpen'} drop-down` }
-    >
-      <button
-        id={`${id}-btn`}
-        className='drop-down-btn'
-        type='button'
-        value={selected}
-        onClick={handleToggle}
-      ></button>
-      <div className='drop-down-menu'>
-      {options.map(opt => (
-        <button
-        id={opt}
-        key={opt}
-        type='button'
-        value={opt}
-        onClick={unlocked && (() => handleChange(opt))}
-        ></button>
-      ))}
-      </div>
-    </div>
-  )
-}
 const Heading = ({id, value}) => {
   return (
     <div id={id} className='flex-row gap05'>
@@ -104,7 +67,7 @@ const Slider = ({id, label, unlocked, initialValue, handleDel }) => {
     setProgress(e.target.value);
   }
   return (
-    <div id={id} className='slider-div flex-column'>
+    <div id={id} className='slider-div flex-column gap05'>
       <TextInput id={`${id}-input`} className='block inherit uppercase' unlocked={unlocked} initialValue={label} placeholder={'JS'}>
       </TextInput>
       <input
@@ -175,4 +138,79 @@ const ProfilePic = ({unlocked}) => {
   )
 }
 
-export {TextInput, Textarea, Slider, ProfilePic, Heading, AddButton}
+const DateInput = ({id, unlocked, initialValue}) =>{
+  const [year, setYear] = useState(initialValue.year)
+
+  return (
+    <div id={id} className='flex-row'>
+      <TextInput 
+        id={`${id}-month`} 
+        unlocked={unlocked} 
+        initialValue={initialValue.month} 
+        className={'uppercase bold fit-content'}
+        placeholder={'Month'}
+      ></TextInput>
+      <input
+        type='number'
+        min='1950'
+        max='2050'
+        value={year}
+        onChange={unlocked && ((e) => setYear(e.target.value))}
+        className='inherit'
+      ></input>
+    </div>
+  )
+
+}
+const EduExp = ({id, value, unlocked, handleDel, title, date}) => {
+  return (
+    <section id={id}>
+      <div className='flex-row'>
+        <DateInput id={`${id}-start-date`} unlocked={unlocked} initialValue={date.start}></DateInput>
+        <DateInput id={`${id}-end-date`} unlocked={unlocked} initialValue={date.end}></DateInput>
+        <TextInput id={`${id}-title`} unlocked={unlocked} initialValue={title} className='uppercase' placeholder='Institute Name'></TextInput>
+      </div>
+      <Textarea id={`${id}-text`} unlocked={unlocked} initialValue={value} placeholder='Description'></Textarea>
+      <DelButton id={`${id}-del`} unlocked={unlocked} handleClick={handleDel}></DelButton>
+    </section>
+  )
+}
+const ExpandableSection = ({ tabIndex, id, unlocked, className, newValue, initialValue, expandable, type}) => {
+const [values, setValues] = useState(initialValue);
+  const handleAdd = () => {
+    if(unlocked && expandable) {
+      setValues([...values, newValue])
+    }
+  }
+  const handleDel = (e) => {
+    const newValues = values.filter(val => `${val.id}-del` !== e.target.id);
+    setValues([...newValues])
+  }
+  return (
+    <section 
+      tabIndex={tabIndex}
+      id={id}
+      className={className}
+    >      
+      {type === 'skills' 
+        && <Heading id='skill-heading' value='SKILLS'></Heading>}
+      {type === 'skills' 
+        && <div className="flex-column all-sliders">
+        {values.map(val => (
+          <Slider id={val.id} key={val.id} label={val.label} unlocked={unlocked} initialValue={val.initialValue} handleDel={handleDel}></Slider>
+        ))}
+        </div>
+      }
+      {type === 'edu-exp' &&
+        <div className='flex-column all-edu-exp'>
+          {values.map(val => (
+            <EduExp id={val.id} key={val.id} value={val.value} unlocked={unlocked} handleDel={handleDel} date={val.date} title={val.title}></EduExp>
+          ))}
+        </div>
+      }
+      <AddButton id={`${id}-add-btn`} unlocked={unlocked} expandable={expandable} handleClick={handleAdd} style={{display: unlocked && expandable ? 'block' : 'none'}}></AddButton>
+    </section>
+  )
+}
+
+export {TextInput, Textarea, Slider, ProfilePic, Heading, AddButton, ExpandableSection}
