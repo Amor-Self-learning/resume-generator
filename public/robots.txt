@@ -2,4 +2,4 @@ User-agent: *
 Allow: /
 Disallow: /editor
 
-Sitemap: https://resume-generator.vercel.app/sitemap.xml
+Sitemap: https://resume-generator-en.vercel.app/sitemap.xml
