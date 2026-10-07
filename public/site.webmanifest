@@ -1,0 +1,17 @@
+{
+  "name": "resumé. — thoughtful resume builder",
+  "short_name": "resumé.",
+  "description": "A thoughtful resume builder with expressive templates and a private, local-first editor.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#f5f2eb",
+  "theme_color": "#d9f36a",
+  "icons": [
+    {
+      "src": "/favicon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ]
+}

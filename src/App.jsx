@@ -37,6 +37,13 @@ const defaultResume = {
 
 const copy = (value) => JSON.parse(JSON.stringify(value))
 const preferredTheme = () => window.matchMedia?.('(prefers-color-scheme: dark)').matches ? 'dark' : 'light'
+const pageMetadata = {
+  home: { title: 'resumé. — make your work easy to remember', description: 'resumé. is a thoughtful resume builder with expressive templates, live preview, private local editing, and clean PDF printing.' },
+  guide: { title: 'Resume Guide: How to Write a Resume People Remember | resumé.', description: 'Practical resume writing advice for clearer headlines, stronger evidence, better structure, and a resume that is easy to read.' },
+  about: { title: 'About resumé. — a thoughtful resume builder', description: 'resumé. is a private, local-first resume builder for people who care about the work they make and how they present it.' },
+  privacy: { title: 'Privacy — resumé. keeps your resume local', description: 'Learn how resumé. stores resume data locally in your browser and what happens when you use external links.' },
+  editor: { title: 'Build your resume | resumé.', description: 'Build, style, preview, and print a resume privately in your browser.' },
+}
 
 function App() {
   const navigate = useNavigate()
@@ -62,6 +69,23 @@ function App() {
   useEffect(() => { localStorage.setItem('quiet-resume', JSON.stringify(resume)) }, [resume])
   useEffect(() => { localStorage.setItem('quiet-template', template); localStorage.setItem('quiet-settings', JSON.stringify(settings)) }, [template, settings])
   useEffect(() => { document.documentElement.dataset.theme = theme; localStorage.setItem('quiet-theme', theme) }, [theme])
+  useEffect(() => {
+    const metadata = pageMetadata[page] || pageMetadata.home
+    const canonicalUrl = `${window.location.origin}${page === 'home' ? '/' : `/${page}`}`
+    const setMeta = (selector, content) => document.querySelector(selector)?.setAttribute('content', content)
+    document.title = metadata.title
+    setMeta('meta[name="description"]', metadata.description)
+    setMeta('meta[name="robots"]', page === 'editor' ? 'noindex, nofollow' : 'index, follow, max-image-preview:large')
+    setMeta('meta[property="og:title"]', metadata.title)
+    setMeta('meta[property="og:description"]', metadata.description)
+    setMeta('meta[property="og:url"]', canonicalUrl)
+    setMeta('meta[property="og:image"]', `${window.location.origin}/og-card.png`)
+    setMeta('meta[property="og:image:secure_url"]', `${window.location.origin}/og-card.png`)
+    setMeta('meta[name="twitter:title"]', metadata.title)
+    setMeta('meta[name="twitter:description"]', metadata.description)
+    setMeta('meta[name="twitter:image"]', `${window.location.origin}/og-card.png`)
+    document.querySelector('link[rel="canonical"]')?.setAttribute('href', canonicalUrl)
+  }, [page])
 
   const selectedTemplate = templates.find((item) => item.id === template) || templates[0]
   const update = (key, value) => setResume((current) => ({ ...current, [key]: value }))
@@ -96,7 +120,7 @@ function Nav({ setPage, editor = false, onPrint, theme, setTheme }) {
     <button className="brand" onClick={() => setPage('home')}><span className="brand-mark">r</span> resumé<span className="brand-dot">.</span></button>
     <div className="nav-links">
       <button onClick={openTemplates}>Templates</button>
-      <button onClick={() => setPage('guide')}>Guides</button>
+      <button onClick={() => setPage('guide')}>Guide</button>
       <button onClick={() => setPage('about')}>About</button>
     </div>
     {!editor && <button className="nav-cta" onClick={() => setPage('editor')}>Build my resume <span>↗</span></button>}
@@ -187,7 +211,46 @@ function ResumePreview({ resume, template, settings }) { const websiteUrl = resu
 function ResumeSection({ title, children }) { return <section className="resume-section"><h2>{title}</h2>{children}</section> }
 function ResumeEntry({ role, company, dates, description }) { return <div className="resume-entry"><div className="entry-top"><h3>{role}</h3><span>{dates}</span></div><b>{company}</b><p>{description}</p></div> }
 
-function Article({ page, setPage, theme, setTheme }) { const content = { guide: { kicker: 'The thoughtful guide', title: <>How to make a resume<br /><em>people remember.</em></>, intro: 'A resume is not a biography. It is a clear, kind invitation to learn more about the way you think and the work you can do.', sections: [['Lead with the useful bit', 'Recruiters are scanning for a reason to keep reading. Put your strongest signal first: the role you want, the kind of problems you solve, and one proof point that makes it real.'], ['Make every line earn its place', 'Swap responsibilities for outcomes. “Managed social media” is a task. “Grew qualified inbound leads by 32% in one quarter” is a reason to call you.'], ['Keep the reader comfortable', 'Use short paragraphs, clear headings, and enough breathing room. A good resume feels easy to read because you did the hard work of editing it.']] }, about: { kicker: 'A small team with big care', title: <>Good work deserves<br /><em>a good first impression.</em></>, intro: 'resumé. is a quiet, friendly tool for people who care about what they make. We believe applying for work should feel less like formatting and more like telling the truth well.', sections: [['Less noise, more signal', 'We make the visual decisions so you can spend your energy on the words. Every template is built to be readable, editable, and yours.'], ['Made for the messy middle', 'No account, no paywall, no strange export. Your work stays in your browser and your resume is ready when you are.']] }, privacy: { kicker: 'The uninteresting but important bit', title: <>Your words are<br /><em>your business.</em></>, intro: 'We built resumé. to work without accounts or a server-side profile. Your resume data is saved in your browser so you can keep working between visits.', sections: [['Local by default', 'We use local browser storage to remember your resume on this device. We do not sell, rent, or share the content you enter into the editor.'], ['A note on links', 'This site may include links to helpful third-party resources. Their privacy practices are their own, so check their policies before sharing personal information.']] } }[page]; return <div className="site-shell article-shell"><Nav setPage={setPage} theme={theme} setTheme={setTheme} /><main className="article-page"><p className="eyebrow"><span className="eyebrow-line" /> {content.kicker}</p><h1>{content.title}</h1><p className="article-intro">{content.intro}</p><div className="article-sections">{content.sections.map(([title, text], index) => <section key={title}><span>0{index + 1}</span><div><h2>{title}</h2><p>{text}</p></div></section>)}</div><button className="primary-button" onClick={() => setPage('editor')}>Make your resume <span>↗</span></button></main><Footer setPage={setPage} /></div> }
+function Article({ page, setPage, theme, setTheme }) {
+  const content = {
+    guide: {
+      kicker: 'The practical resume guide',
+      title: <>Write a resume<br /><em>worth reading.</em></>,
+      intro: 'A strong resume is not a biography. It is a clear, useful invitation to learn more about the way you think, the problems you solve, and the work you can do.',
+      sections: [
+        ['Lead with the role you want', 'Your name and headline should make your direction obvious in seconds. Say what you do, who you help, or what kind of problems you solve. A focused headline gives every other section a job.'],
+        ['Turn responsibilities into proof', 'Replace a list of duties with evidence. Explain what changed because you were there, then add a real number, time frame, scale, or result when you have one. Never invent a metric—specific and honest beats impressive and vague.'],
+        ['Make the page easy to scan', 'Use familiar section names such as Profile, Experience, Education, and Skills. Keep entries short, use consistent dates, and leave enough whitespace that a reader can find the important parts without working for them.'],
+        ['Choose a template that matches your signal', 'Technical resumes benefit from structure and precision. Creative resumes can show more personality. Executive resumes need calm hierarchy. Choose a visual direction that supports your work instead of competing with it.'],
+        ['Tailor the details, not your identity', 'For each application, adjust the headline, summary, skills, and order of experience toward the role. A good resume builder should make this easy without asking you to rewrite your whole story every time.'],
+        ['Do a final export check', 'Open every link, check the dates, read the page aloud, and print or preview the PDF before sending it. A polished resume is not about perfection; it is about removing the small distractions that make good work harder to see.'],
+      ],
+    },
+    about: {
+      kicker: 'A small tool with a clear point of view',
+      title: <>Good work deserves<br /><em>a good first impression.</em></>,
+      intro: 'resumé. is a thoughtful resume builder for people who care about what they make. It helps you turn experience, potential, and unfinished ideas into a document you are proud to send.',
+      sections: [
+        ['Built for thoughtful applications', 'Most resume tools make you choose between rigid forms and over-designed templates. resumé. keeps the structure useful and the visual language expressive, so the result can feel professional without feeling generic.'],
+        ['Expressive, not decorative', 'The template collection is designed for different kinds of work: technical, editorial, creative, executive, portfolio, and everything in between. Typography, spacing, and hierarchy do the heavy lifting so decoration never gets in the way.'],
+        ['Private by default', 'Your resume is saved locally in this browser. There is no account to create, no profile to maintain, and no server-side resume database quietly collecting your personal details.'],
+        ['Made to get out of the way', 'The editor is intentionally small. Write your story, switch directions, see the result immediately, and print when it feels right. The goal is not more features; it is a better moment between you and your next opportunity.'],
+      ],
+    },
+    privacy: {
+      kicker: 'The uninteresting but important bit',
+      title: <>Your words are<br /><em>your business.</em></>,
+      intro: 'resumé. is designed to work without an account or a server-side resume profile. Here is the short version of what that means.',
+      sections: [
+        ['Local by default', 'Resume content, template choices, theme preferences, and editor settings are saved in local browser storage on your device. Clearing that browser data removes the saved copy.'],
+        ['No resume upload', 'The editor does not send your resume content to a server to create the live preview or print output. Your work stays in the browser while you use the app.'],
+        ['A note on external links', 'The resume preview can include email, phone, and website links that you enter. Those links open the relevant application or website, whose privacy practices are separate from resumé.'],
+      ],
+    },
+  }[page]
+
+  return <div className="site-shell article-shell"><Nav setPage={setPage} theme={theme} setTheme={setTheme} /><main className="article-page"><p className="eyebrow"><span className="eyebrow-line" /> {content.kicker}</p><h1>{content.title}</h1><p className="article-intro">{content.intro}</p><div className="article-sections">{content.sections.map(([title, text], index) => <section key={title}><span>{String(index + 1).padStart(2, '0')}</span><div><h2>{title}</h2><p>{text}</p></div></section>)}</div><button className="primary-button" onClick={() => setPage('editor')}>Make your resume <span>↗</span></button></main><Footer setPage={setPage} /></div>
+}
 function Footer({ setPage }) { return <footer><button className="brand" onClick={() => setPage('home')}><span className="brand-mark">r</span> resumé<span className="brand-dot">.</span></button><p>Made for the next good thing.</p><div><button onClick={() => setPage('guide')}>Guide</button><button onClick={() => setPage('privacy')}>Privacy</button><button onClick={() => setPage('about')}>About</button></div></footer> }
 
 export default App

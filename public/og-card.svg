@@ -1,0 +1,40 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630" fill="none">
+  <rect width="1200" height="630" fill="#F5F2EB"/>
+  <circle cx="1020" cy="-20" r="250" fill="#D9F36A" fill-opacity=".72"/>
+  <circle cx="1080" cy="590" r="300" fill="#6C58ED" fill-opacity=".14"/>
+  <circle cx="100" cy="570" r="230" fill="#FF795F" fill-opacity=".11"/>
+  <path d="M710 0C840 75 930 84 1200 70V440C1045 386 932 411 803 330C716 276 670 150 710 0Z" fill="#E9E3F7"/>
+  <path d="M705 0C824 78 938 94 1200 75" stroke="#6C58ED" stroke-opacity=".28" stroke-width="2"/>
+  <path d="M764 0C859 73 956 123 1200 130" stroke="#6C58ED" stroke-opacity=".2" stroke-width="2"/>
+  <path d="M820 0C900 65 1009 147 1200 194" stroke="#6C58ED" stroke-opacity=".14" stroke-width="2"/>
+
+  <rect x="82" y="72" width="46" height="46" rx="14" fill="#D9F36A"/>
+  <text x="105" y="104" fill="#17181B" font-family="Outfit, Arial, sans-serif" font-size="31" font-weight="700" text-anchor="middle">r</text>
+  <text x="145" y="104" fill="#17181B" font-family="Outfit, Arial, sans-serif" font-size="29" font-weight="700" letter-spacing="-2">resumé<tspan fill="#6C58ED">.</tspan></text>
+
+  <text x="84" y="218" fill="#6C58ED" font-family="Outfit, Arial, sans-serif" font-size="16" letter-spacing="2">A BETTER FIRST IMPRESSION</text>
+  <text x="80" y="308" fill="#17181B" font-family="Outfit, Arial, sans-serif" font-size="72" font-weight="700" letter-spacing="-4">Make your work</text>
+  <text x="80" y="386" fill="#6C58ED" font-family="Outfit, Arial, sans-serif" font-size="61" letter-spacing="-4">easy to remember.</text>
+  <text x="84" y="480" fill="#777977" font-family="Outfit, Arial, sans-serif" font-size="23">A thoughtful resume builder for your next good thing.</text>
+  <text x="84" y="544" fill="#17181B" font-family="Outfit, Arial, sans-serif" font-size="15" letter-spacing="1.5">PRIVATE  •  LOCAL  •  YOURS</text>
+
+  <g transform="translate(855 214) rotate(7)">
+    <rect width="230" height="295" rx="12" fill="#FFFDF8" filter="url(#shadow)"/>
+    <rect x="28" y="30" width="38" height="38" rx="11" fill="#6C58ED"/>
+    <circle cx="47" cy="49" r="9" stroke="#FFFDF8" stroke-width="2"/>
+    <rect x="82" y="32" width="110" height="9" rx="4.5" fill="#17181B"/>
+    <rect x="82" y="50" width="78" height="6" rx="3" fill="#A3A39C"/>
+    <rect x="28" y="93" width="174" height="3" rx="1.5" fill="#D9F36A"/>
+    <rect x="28" y="124" width="63" height="5" rx="2.5" fill="#6C58ED"/>
+    <rect x="28" y="142" width="146" height="6" rx="3" fill="#D8D8D2"/>
+    <rect x="28" y="158" width="126" height="6" rx="3" fill="#D8D8D2"/>
+    <rect x="28" y="191" width="73" height="5" rx="2.5" fill="#6C58ED"/>
+    <rect x="28" y="209" width="160" height="6" rx="3" fill="#D8D8D2"/>
+    <rect x="28" y="225" width="114" height="6" rx="3" fill="#D8D8D2"/>
+  </g>
+  <defs>
+    <filter id="shadow" x="-20%" y="-20%" width="140%" height="140%" filterUnits="objectBoundingBox">
+      <feDropShadow dx="0" dy="18" stdDeviation="18" flood-color="#363329" flood-opacity=".18"/>
+    </filter>
+  </defs>
+</svg>
