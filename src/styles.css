@@ -706,11 +706,25 @@ h2 em {
   .template-orbit .resume-header { margin-right: -22px; margin-left: -22px; padding-right: 22px; padding-left: 22px; }
 }
 
+@page {
+  size: A4;
+  margin: 0;
+}
+
 @media print {
-  html, body, #root { background: #fff !important; }
-  .editor-shell > .nav, .editor-shell > .editor-layout { display: none !important; }
+  html, body, #root {
+    margin: 0 !important;
+    padding: 0 !important;
+    background: #fff !important;
+  }
+
+  .editor-shell > .nav,
+  .editor-shell > .editor-layout { display: none !important; }
+
   .editor-shell { min-height: 0; background: #fff; }
-  .editor-shell .print-root, .print-root {
+
+  .editor-shell .print-root,
+  .print-root {
     display: block !important;
     position: static !important;
     top: auto !important;
@@ -720,21 +734,173 @@ h2 em {
     visibility: visible !important;
     background: #fff !important;
   }
+
   .print-root .resume-paper {
     display: block !important;
+    box-sizing: border-box;      /* padding now counts inside 210x297mm */
     width: 210mm;
-    height: 297mm;
-    min-height: 297mm;
+    height: 297mm;               /* if a blank 2nd page appears, use 296mm */
+    min-height: 0;
     margin: 0;
     padding: 20mm;
     overflow: hidden;
     box-shadow: none;
-    transform: scale(var(--print-scale, 1));
-    transform-origin: top left;
-    page-break-after: always;
+    transform: none;             /* removed: this caused the empty margins */
+    break-after: page;
     print-color-adjust: exact;
     -webkit-print-color-adjust: exact;
   }
+
+  .print-root .resume-paper:last-child { break-after: auto; }
+
   .print-root .resume-entry,
   .print-root .resume-section { break-inside: avoid; }
+}
+/* ==========================================================================
+   MOBILE FIXES
+   Paste at the very END of your stylesheet (after the @media print block).
+   Everything is scoped to `screen`, so none of it can leak into printing.
+   Resume rules are prefixed with `.preview-area` so they only affect the
+   on-screen preview, never `.print-root`.
+   ========================================================================== */
+
+/* ---- Global safety nets (all viewports) -------------------------------- */
+html { -webkit-text-size-adjust: 100%; text-size-adjust: 100%; }
+
+/* 100vh is taller than the visible area on mobile browsers; dvh fixes that. */
+.site-shell,
+.editor-shell { min-height: 100vh; min-height: 100dvh; }
+.editor-layout { min-height: calc(100vh - 82px); min-height: calc(100dvh - 82px); }
+
+/* A bare `1fr` track can't shrink below its content's min-content width,
+   so one wide child (icon picker, nowrap date…) pushes the whole page wider. */
+.editor-layout { grid-template-columns: 400px minmax(0, 1fr); }
+.editor-panel,
+.preview-area { min-width: 0; }
+
+
+@media screen and (max-width: 900px) {
+
+  /* ---- Page layout ----------------------------------------------------- */
+  .editor-layout { grid-template-columns: minmax(0, 1fr); }
+  .hero { grid-template-columns: minmax(0, 1fr); min-height: 0; }
+  .template-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+
+  /* These sections already get their gutter from `width: calc(100% - 40px)`.
+     Adding 20px of padding on top squeezed content to 100% - 80px. */
+  .hero,
+  .templates-section,
+  .article-page,
+  .site-shell footer { padding-left: 0; padding-right: 0; }
+
+  /* ---- Editor panel ---------------------------------------------------- */
+  .editor-panel { min-height: 0; }
+
+  /* A fixed-height scroll box inside a scrolling page is a scroll trap on
+     touch devices. Let the form flow with the page instead. */
+  .form-scroll { max-height: none; overflow: visible; scrollbar-gutter: auto; }
+
+  .editor-tabs { overflow-x: auto; scrollbar-width: none; }
+  .editor-tabs::-webkit-scrollbar { display: none; }
+  .editor-tabs button { flex: none; white-space: nowrap; }
+
+  /* iOS Safari zooms the whole page when a focused field is under 16px. */
+  .field input,
+  .form-section input,
+  .form-section textarea,
+  .entry-form textarea,
+  .font-field select,
+  .color-picker-row input { font-size: 16px; }
+
+  /* 10 fixed columns don't fit in a ~330px panel. */
+  .icon-picker {
+    grid-template-columns: repeat(auto-fill, minmax(38px, 1fr));
+    max-height: 200px;
+  }
+
+  /* Keep Save reachable while scrolling a long form. */
+  .editor-footer {
+    position: sticky;
+    bottom: 0;
+    z-index: 5;
+    background: var(--app-bg);
+    padding-bottom: max(16px, env(safe-area-inset-bottom));
+  }
+
+  /* ---- Resume preview -------------------------------------------------- */
+  .preview-area { padding: 20px 12px 64px; }
+  .preview-toolbar { margin-bottom: 14px; }
+
+  /* One horizontal padding value drives the paper AND the full-bleed
+     headers (signal / orbit), so they can't drift out of sync. */
+  .preview-area .resume-paper {
+    --pad-x: 26px;
+    width: 100%;
+    max-width: 100%;
+    min-height: 0;
+    padding-left: var(--pad-x);
+    padding-right: var(--pad-x);
+    overflow-wrap: break-word;
+  }
+
+  .preview-area .template-signal .resume-header,
+  .preview-area .template-orbit .resume-header {
+    margin-left: calc(var(--pad-x) * -1);
+    margin-right: calc(var(--pad-x) * -1);
+    padding-left: var(--pad-x);
+    padding-right: var(--pad-x);
+  }
+
+  /* Header */
+  .preview-area .template-summit .resume-header { display: block; }
+  .preview-area .resume-paper .resume-header h1 {
+    font-size: clamp(30px, 9.5vw, 42px);
+    line-height: 1.05;
+  }
+  .preview-area .resume-paper .resume-header p { font-size: 15px; }
+  .preview-area .resume-paper .resume-identity > * { min-width: 0; }
+
+  .preview-area .resume-paper .contact-line {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 4px;
+  }
+  .preview-area .resume-paper .contact-line i { display: none; }
+  .preview-area .resume-paper .contact-line > * { overflow-wrap: anywhere; }
+  .preview-area .template-summit .contact-line { max-width: none; justify-content: flex-start; }
+  .preview-area .template-ledger .contact-line { align-items: center; }
+
+  /* Body: every template collapses to a single column (main, then side).
+     `display: block` also makes the ledger/signal grid-column/grid-row
+     swaps inert, so nothing needs resetting. */
+  .preview-area .resume-paper .resume-body { display: block; }
+
+  .preview-area .resume-paper .resume-side {
+    display: block;
+    padding: 22px 0 0;
+    border-left: 0;
+    border-right: 0;
+    border-top: 1px solid #dfe1dc;
+  }
+
+  /* Entries: let title and date wrap instead of overflowing. */
+  .preview-area .resume-paper .entry-top { flex-wrap: wrap; gap: 2px 12px; }
+  .preview-area .resume-paper .resume-entry h3 { min-width: 0; }
+
+  /* Thick decorative borders eat scarce horizontal/vertical space. */
+  .preview-area .resume-paper.template-frame { border-left-width: 10px; }
+  .preview-area .resume-paper.template-canvas { border-top-width: 16px; }
+  .preview-area .resume-paper.template-studio { border-top-width: 12px; }
+}
+
+
+@media screen and (max-width: 600px) {
+  .template-grid { grid-template-columns: minmax(0, 1fr); }
+  .article-sections section { grid-template-columns: 35px minmax(0, 1fr); }
+}
+
+
+@media screen and (max-width: 390px) {
+  .preview-area { padding-left: 8px; padding-right: 8px; }
+  .preview-area .resume-paper { --pad-x: 20px; }
 }
